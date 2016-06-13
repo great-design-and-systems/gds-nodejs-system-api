@@ -1,0 +1,39 @@
+{
+  "name": "gsd-nodejs-system-api",
+  "version": "0.1.0",
+  "description": "Great design and systems portfolio rest services api using nodejs",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typings": "./node_modules/.bin/typings",
+    "gulp": "./node_modules/.bin/gulp",
+    "postinstall":"typings install & gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/great-design-and-systems/gds-nodejs-system-api.git"
+  },
+  "keywords": [
+    "gds",
+    "system-api",
+    "nodejs"
+  ],
+  "author": "Jerico de Guzman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/great-design-and-systems/gds-nodejs-system-api/issues"
+  },
+  "homepage": "https://github.com/great-design-and-systems/gds-nodejs-system-api#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-express": "^0.3.5",
+    "gulp-mocha": "^2.2.0",
+    "gulp-tslint": "^5.0.0",
+    "gulp-typescript": "^2.13.6",
+    "mocha": "^2.5.3",
+    "tslint": "^3.11.0",
+    "typescript": "^1.8.10",
+    "typings": "^1.0.5"
+  }
+}
