@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "typings": "./node_modules/.bin/typings",
     "gulp": "./node_modules/.bin/gulp",
-    "postinstall": "gulp",
+    "postinstall": "npm run gulp",
     "start": "./node_modules/.bin/gulp build-all && node dist/index.js"
   },
   "repository": {
