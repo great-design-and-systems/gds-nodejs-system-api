@@ -1,0 +1,11 @@
+import express = require("express");
+import mongoose = require("mongoose");
+import morgan = require("morgan");
+import bodyParser = require("body-parser");
+import {AppRoutes} from "./app.routes";
+import {Server} from "./config/server";
+const PORT = process.env.port || 3000;
+const app = express();
+new Server(app);
+new AppRoutes(app);
+export = app;
