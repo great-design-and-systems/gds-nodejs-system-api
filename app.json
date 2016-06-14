@@ -1,0 +1,8 @@
+{
+  "name": "Node.js Getting Started",
+  "description": "Great design and systems porfolio rest services nodejs api",
+  "repository": "https://github.com/great-design-and-systems/gds-nodejs-system-api",
+  "logo": "http://node-js-sample.herokuapp.com/node.svg",
+  "keywords": ["node", "express", "static"],
+  "image": "heroku/nodejs"
+}
