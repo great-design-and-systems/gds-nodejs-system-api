@@ -14,4 +14,5 @@ export function Server(app) {
     app.listen(PORT, () => {
         console.log("listening on PORT" + PORT);
     });
+    app.get("/", (req, res) => res.send("Welcome to GDS System API"));
 }
