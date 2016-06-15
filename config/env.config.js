@@ -3,5 +3,5 @@ module.exports = {
     files: '**/*.ts',
     dist: 'dist',
     testFiles: '**/*bdd.*',
-    typescripts: 'typings/**/*.d.ts'
+    typescripts: 'typings/index.d.ts'
 }
