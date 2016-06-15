@@ -13,7 +13,7 @@ export function Server(app) {
         type: "application/vnd.api+json"
     }));
     app.listen(app.get("port"), () => {
-        console.log('Node app is running on port', app.get('port'));
+        console.log("Node app is running on port", app.get("port"));
     });
     app.get("/", (req, res) => res.send("Welcome to GDS System API"));
 }
