@@ -42,6 +42,11 @@ gulp.task('test-all', function() {
             reporter: 'nyan'
         }));
 });
+gulp.task('watch-all', function() {
+   return gulp.watch(appConfig.ALL.src, function(event) {
+        runSequence('build-all');
+    });
+});
 gulp.task('build-basic-inventory', function() {
     runSequence('clean-basic-inventory', 'tslint-basic-inventory', 'compile-basic-inventory', 'test-basic-inventory');
 });
@@ -72,6 +77,11 @@ gulp.task('test-basic-inventory', function() {
         .pipe(mocha({
             reporter: 'nyan'
         }));
+});
+gulp.task('watch-basic-inventory', function() {
+   return gulp.watch(appConfig.BASIC_INVENTORY.src, function(event) {
+        runSequence('build-basic-inventory');
+    });
 });
 gulp.task('run-server', function() {
     server.run(appConfig.SERVER.main);

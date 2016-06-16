@@ -1,6 +1,6 @@
 import mongoose = require("mongoose");
 
-export interface Item extends mongoose.Document {
+export interface IItem {
     name: String;
     description: String;
     amount: Number;
@@ -8,3 +8,4 @@ export interface Item extends mongoose.Document {
     lastShipment: Date;
     nextShipment: Date;
 }
+export interface IItemModel extends IItem,  mongoose.Document { }

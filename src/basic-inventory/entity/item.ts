@@ -1,5 +1,5 @@
 import mongoose = require("mongoose");
-import {Item} from "./interfaces";
+import {IItemModel} from "./item-model";
 
 let ItemSchema = new mongoose.Schema({
     name: {
@@ -24,4 +24,6 @@ let ItemSchema = new mongoose.Schema({
     }
 });
 
-export = mongoose.model<Item>("Item", ItemSchema);
+let Item = mongoose.model<IItemModel>("item", ItemSchema);
+
+export = Item;
