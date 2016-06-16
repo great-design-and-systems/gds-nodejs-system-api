@@ -3,17 +3,18 @@ import mongoose = require("mongoose");
 import { IItem } from "./entity/item-model";
 import ItemDAO = require("./entity/item");
 import { CreateItem } from "./control/create-item";
+import { GetItem } from "./control/get-item";
 const expect = chai.expect;
-
+const DATABASE_TEST_URL = "mongodb://gds-systems:gds-systems@ds015194.mlab.com:15194/gds-system-test";
 beforeEach((done) => {
     function clearDB() {
         for (let i in mongoose.connection.collections) {
-            mongoose.connection.db.dropCollection(mongoose.connection.collections[i], () => {});
+            mongoose.connection.db.dropCollection(mongoose.connection.collections[i], () => { });
         }
         return done();
     }
     if (mongoose.connection.readyState === 0) {
-        mongoose.connect(process.env.DATABASE_TEST_URL, function(err) {
+        mongoose.connect(DATABASE_TEST_URL, function (err) {
             if (err) {
                 throw err;
             }
@@ -26,7 +27,7 @@ beforeEach((done) => {
 });
 
 describe("Basic Invenotry BDD", () => {
-
+    let savedId;
     describe("GIVEN: I have item information", () => {
         let item: any;
         beforeEach(() => {
@@ -39,19 +40,37 @@ describe("Basic Invenotry BDD", () => {
             item.nextShipment = new Date();
         });
         describe("WHEN: saving item", () => {
-           let saveResult;
-           let errResult;
-           beforeEach((done) => {
-               new CreateItem(item).execute((err, result) => {
-                   console.log("resultresult", result);
-                   saveResult = result;
-                   errResult = err;
-                   done();
-               });
-           });
-           it("THEN: item is persisted", () => { });
+            let saveResult;
+            let errResult;
+            beforeEach((done) => {
+                new CreateItem(item).execute((err, result) => {
+                    saveResult = result;
+                    errResult = err;
+                    savedId = result._id;
+                    done();
+                });
+            });
+            it("THEN: item is persisted", () => {
+                expect(!!saveResult._id).to.be.true;
+            });
         });
     });
+    describe("GIVEN: I have item id", () => {
+        describe("WHEN: retrieving an item with _id", () => {
+            let retrievalResult;
+            let errResult;
+            beforeEach((done) => {
+                new GetItem(savedId).execute((err, result) => {
+                    console.log("retrievalResult", retrievalResult);
+                    errResult = err;
+                    retrievalResult = result;
+                    done();
+                });
+            });
+            it("THEN: item is retreived", () => { });
+        });
+    });
+
 });
 
 afterEach((done) => {
