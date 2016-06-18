@@ -1,5 +1,5 @@
 import mongoose = require("mongoose");
 
 export function Database() {
-    mongoose.connect(process.env.DATABASE_URL);
+    mongoose.connect("mongodb://gds-systems:gds-systems@ds025973.mlab.com:25973/gds-system");
 }

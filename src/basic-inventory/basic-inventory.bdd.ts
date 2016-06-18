@@ -10,7 +10,9 @@ const DATABASE_TEST_URL = "mongodb://gds-systems:gds-systems@ds015194.mlab.com:1
 beforeEach((done) => {
     function clearDB() {
         for (let i in mongoose.connection.collections) {
-            mongoose.connection.db.dropCollection(mongoose.connection.collections[i], () => { });
+            mongoose.connection.collections[i].drop(function (err) {
+                console.log("collection dropped");
+            });
         }
         return done();
     }
@@ -28,9 +30,8 @@ beforeEach((done) => {
 });
 
 describe("Basic Invenotry BDD", () => {
-    let savedId;
+    let item: any;
     describe("GIVEN: I have item information", () => {
-        let item: any;
         beforeEach(() => {
             item = {};
             item.name = "item#1";
@@ -47,7 +48,6 @@ describe("Basic Invenotry BDD", () => {
                 new CreateItem(item).execute((err, result) => {
                     saveResult = result;
                     errResult = err;
-                    savedId = result._id;
                     done();
                 });
             });
@@ -59,12 +59,12 @@ describe("Basic Invenotry BDD", () => {
     describe("GIVEN: I have item id", () => {
         describe("WHEN: retrieving an item with _id", () => {
             let retrievalResult;
-            let errResult;
             beforeEach((done) => {
-                new GetItemByID(savedId).execute((err, result) => {
-                    errResult = err;
-                    retrievalResult = result;
-                    done();
+                new CreateItem(item).execute((err, savedresult) => {
+                    new GetItemByID(savedresult._od).execute((err, result) => {
+                        retrievalResult = result;
+                        done();
+                    });
                 });
             });
             it("THEN: item is retreived", () => {
@@ -75,16 +75,16 @@ describe("Basic Invenotry BDD", () => {
     describe("GIVEN: I have items", () => {
         describe("WHEN: retrieving all items", () => {
             let retrievalResults;
-            let errResult;
             beforeEach((done) => {
-                new GetItemByID({}).execute((err, result) => {
-                    errResult = err;
-                    retrievalResults = result;
-                    done();
+                new CreateItem(item).execute((err, savedresult) => {
+                    new GetItems().execute((err, result) => {
+                        retrievalResults = result;
+                        done();
+                    });
                 });
             });
             it("THEN: items are retreived", () => {
-                expect(retrievalResults.length).to.be.defined;
+                expect(!!retrievalResults.length).to.be.true;
             });
         });
     });
