@@ -24,6 +24,4 @@ let ItemSchema = new mongoose.Schema({
     }
 });
 
-let Item = mongoose.model<IItemModel>("item", ItemSchema);
-
-export = Item;
+export = mongoose.model<IItemModel>("item", ItemSchema);

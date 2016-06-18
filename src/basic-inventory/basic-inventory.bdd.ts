@@ -3,7 +3,8 @@ import mongoose = require("mongoose");
 import { IItem } from "./entity/item-model";
 import ItemDAO = require("./entity/item");
 import { CreateItem } from "./control/create-item";
-import { GetItem } from "./control/get-item";
+import { GetItemByID } from "./control/get-item-by-id";
+import { GetItems } from "./control/get-items";
 const expect = chai.expect;
 const DATABASE_TEST_URL = "mongodb://gds-systems:gds-systems@ds015194.mlab.com:15194/gds-system-test";
 beforeEach((done) => {
@@ -60,17 +61,33 @@ describe("Basic Invenotry BDD", () => {
             let retrievalResult;
             let errResult;
             beforeEach((done) => {
-                new GetItem(savedId).execute((err, result) => {
-                    console.log("retrievalResult", retrievalResult);
+                new GetItemByID(savedId).execute((err, result) => {
                     errResult = err;
                     retrievalResult = result;
                     done();
                 });
             });
-            it("THEN: item is retreived", () => { });
+            it("THEN: item is retreived", () => {
+                expect(!!retrievalResult._id).to.be.true;
+            });
         });
     });
-
+    describe("GIVEN: I have items", () => {
+        describe("WHEN: retrieving all items", () => {
+            let retrievalResults;
+            let errResult;
+            beforeEach((done) => {
+                new GetItemByID({}).execute((err, result) => {
+                    errResult = err;
+                    retrievalResults = result;
+                    done();
+                });
+            });
+            it("THEN: items are retreived", () => {
+                expect(retrievalResults.length).to.be.defined;
+            });
+        });
+    });
 });
 
 afterEach((done) => {
