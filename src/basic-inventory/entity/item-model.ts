@@ -3,8 +3,8 @@ import mongoose = require("mongoose");
 export interface IItem {
     name: String;
     description: String;
-    amount: Number;
-    quantity: Number;
+    amount: number;
+    quantity: number;
     lastShipment: Date;
     nextShipment: Date;
 }

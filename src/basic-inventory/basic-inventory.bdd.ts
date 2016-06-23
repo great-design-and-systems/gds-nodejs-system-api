@@ -1,21 +1,26 @@
 import chai = require("chai");
 import mongoose = require("mongoose");
-import { IItem } from "./entity/item-model";
 import ItemDAO = require("./entity/item");
-import { CreateItem } from "./control/create-item";
-import { GetItemByID } from "./control/get-item-by-id";
-import { GetItems } from "./control/get-items";
+import {CreateItem} from "./control/create-item";
+import {GetItemByID} from "./control/get-item-by-id";
+import {GetItems} from "./control/get-items";
+import {RemoveItemByID} from "./control/remove-item-by-id";
+import {AddItemQuantityByID} from "./control/add-item-quantity-by-id";
+import {UpdateItemByID} from "./control/update-item-by-id";
 const expect = chai.expect;
 const DATABASE_TEST_URL = "mongodb://gds-systems:gds-systems@ds015194.mlab.com:15194/gds-system-test";
 beforeEach((done) => {
     function clearDB() {
         for (let i in mongoose.connection.collections) {
-            mongoose.connection.collections[i].drop(function (err) {
-                console.log("collection dropped");
-            });
+            if (mongoose.connection.collections[i] && mongoose.connection.collections[i].drop) {
+                mongoose.connection.collections[i].drop(function (err) {
+                    console.log("collection dropped");
+                });
+            }
         }
         return done();
     }
+
     if (mongoose.connection.readyState === 0) {
         mongoose.connect(DATABASE_TEST_URL, function (err) {
             if (err) {
@@ -57,18 +62,70 @@ describe("Basic Invenotry BDD", () => {
         });
     });
     describe("GIVEN: I have item id", () => {
+        let savedresult;
+        beforeEach(done => {
+            new CreateItem(item).execute((err, result) => {
+                savedresult = result;
+                done();
+            });
+        });
         describe("WHEN: retrieving an item with _id", () => {
             let retrievalResult;
             beforeEach((done) => {
-                new CreateItem(item).execute((err, savedresult) => {
-                    new GetItemByID(savedresult._od).execute((err, result) => {
-                        retrievalResult = result;
-                        done();
-                    });
+                new GetItemByID(savedresult._id).execute((err, result) => {
+                    retrievalResult = result;
+                    done();
                 });
             });
             it("THEN: item is retreived", () => {
                 expect(!!retrievalResult._id).to.be.true;
+            });
+        });
+        describe("WHEN: removing an item with _id", () => {
+            let retrievalResult;
+            beforeEach((done) => {
+                new RemoveItemByID(savedresult._id).execute((deleteErr, result) => {
+                    if (!deleteErr) { retrievalResult = result; }
+                    done();
+                });
+            });
+            it("THEN: item is removed", (done) => {
+                expect(!!retrievalResult._id).to.be.true;
+                new GetItemByID(retrievalResult._id).execute((err, result) => {
+                    expect(result == null).to.be.true;
+                    done();
+                });
+            });
+        });
+        describe("WHEN: updating", () => {
+            let retrievalResults;
+            beforeEach((done) => {
+                savedresult.name = "gello";
+                new UpdateItemByID(savedresult._id, savedresult).execute((updateErr, update) => {
+                    new GetItemByID(savedresult._id).execute((err, result) => {
+                        retrievalResults = result;
+                        done();
+                    });
+                });
+            });
+            it("THEN: item is updated", () => {
+                expect(!!retrievalResults).to.be.true;
+                expect(retrievalResults.name === "gello").to.be.true;
+            });
+        });
+        describe("WHEN: adding quantity", () => {
+            let retrievalResults;
+            beforeEach((done) => {
+                new AddItemQuantityByID(savedresult._id, 2).execute((updateErr, update) => {
+                    new GetItemByID(savedresult._id).execute((err, result) => {
+                        retrievalResults = result;
+                        done();
+                    });
+                });
+            });
+            it("THEN: item quantity is added", () => {
+                expect(!!retrievalResults).to.be.true;
+                expect(retrievalResults.quantity === 12).to.be.true;
             });
         });
     });

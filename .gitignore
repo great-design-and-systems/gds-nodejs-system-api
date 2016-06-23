@@ -1,3 +1,6 @@
 node_modules
 dist
 /typings
+.idea
+gds-nodejs-system-api.iml
+npm-debug.log
